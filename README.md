@@ -24,3 +24,7 @@ controls = np.random.rand(n, d)
 
 x_binned, y_binned, x_smooth, y_smooth = binscatter(x, y, controls)
 ```
+
+## See also
+
+- [michaelstepner/binscatter](https://github.com/michaelstepner/binscatter)
