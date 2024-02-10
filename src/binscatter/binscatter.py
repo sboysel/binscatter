@@ -1,15 +1,48 @@
+"""binscatter
+Author: Sam Boysel <sboysel@gmail.com>
+Original author:  Elizabeth Santorella
+Source: fork of https://github.com/esantorella/binscatter
+SPDX-License-Identifier: BSD-3-Clause
+"""
 import numpy as np
 
+
+def binscatter(x, y, controls, k=1, n_bins=None, x_linspace_num=100) -> tuple:
+    """Generate data for binned scatterplot"""
+    bs = Binscatter(x, y, controls, k, n_bins, x_linspace_num)
+    return bs.generate()
+
 class Binscatter:
-    """
+    """Class to generate plottable data for binned scatterplot
+
+    Parameters
+
+    x : numpy.ndarray            (required) x values to plot 
+    y : numpy.ndarray            (required) y values to plot
+    controls : numpy.ndarray     (optional) control variables used for conditioning
+                                 the relationship between x and y on. If provided,
+                                 Binscatter.generate() will 'residualize / de-mean'
+                                 both x and y using the variables in controls.
+    k : int                      (required)
+    n_bins: int                  (optional)
+    x_linspace_num : int         (required)
+    
     for data (y, x), return version with means by bin
     for data (y, x, controls), first residualize (y, x) with controls, then return
         the binned version.
+    
+    Returns 
+    
+    x_binned : numpy.ndarray
+    y_binned : numpy.ndarray
+    x_smooth : numpy.ndarray           linspace used to plot smoothed polynomial
+                                       fit
+    y_smooth : numpy.poly1d            a smoothed polynomial of dergree k
 
     based on binscatter by Elizabeth Santorella
     source: https://github.com/esantorella/binscatter
     """
-    def __init__(self, x, y, controls, k=1, n_bins=None):
+    def __init__(self, x, y, controls, k=1, n_bins=None, x_linspace_num=100):
         """
         """
         self.x = x
@@ -17,9 +50,12 @@ class Binscatter:
         self.controls = controls
         self.k = k
         self.n_bins = n_bins    
-        self._run() 
+        self.x_binned = None
+        self.y_binned = None
+        self.x_smooth = None
+        self.y_smooth = None
 
-    def _run(self):
+    def generate(self):
         """
         """
         if self.controls is None:
@@ -36,13 +72,16 @@ class Binscatter:
         self.bins = _get_bins(len(self.y), self.n_bins)
 
         # binned means
-        x_means = [np.mean(x_tilde[bin_]) for bin_ in self.bins]
-        y_means = [np.mean(y_tilde[bin_]) for bin_ in self.bins]
+        x_binned = np.array([np.mean(x_tilde[bin_]) for bin_ in self.bins])
+        y_binned = np.array([np.mean(y_tilde[bin_]) for bin_ in self.bins])
 
         # polynomial fit
-        fit = np.polyfit(x_means, y_means, self.k)
-
-        return (x_means, y_means, fit)
+        coef = np.polyfit(x_binned, y_binned, self.k)
+        poly = np.poly1d(coef)
+        x_smooth = np.linspace(x.min(), y.min(), num=x_linspace_num)
+        y_smooth = poly(x_smooth)
+        
+        return (x_binned, y_binned, x_smooth, y_smooth)
 
 
 def _ols(X, y, rcond=None):
