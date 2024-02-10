@@ -1,8 +1,7 @@
 import numpy as np
 import pytest
 
-from src.binscatter import Binscatter # noqa: F401
-
+from src.binscatter import Binscatter
 
 @pytest.fixture
 def data() -> tuple:

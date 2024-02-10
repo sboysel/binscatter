@@ -5,11 +5,11 @@ build-backend = "hatchling.build"
 [project]
 name = "binscatter"
 dynamic = ["version"]
-description = ''
+description = "Prepare bivariate data for binned scatter plotting. Optionally condition on a set of controls."
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
-keywords = []
+keywords = ["binscatter", "plotting", "regression"]
 authors = [
   { name = "Sam Boysel", email = "sboysel@gmail.com" },
 ]
@@ -29,9 +29,9 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/unknown/binscatter#readme"
-Issues = "https://github.com/unknown/binscatter/issues"
-Source = "https://github.com/unknown/binscatter"
+Documentation = "https://github.com/sboysel/binscatter#readme"
+Issues = "https://github.com/sboysel/binscatter/issues"
+Source = "https://github.com/sboysel/binscatter"
 
 [tool.hatch.version]
 path = "src/binscatter/__about__.py"

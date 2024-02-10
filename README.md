@@ -10,7 +10,7 @@ pip install git+https://github.com/sboysel/binscatter@dev
 
 ## Usage
 
-```
+```python
 import binscatter
 import numpy as np
 
