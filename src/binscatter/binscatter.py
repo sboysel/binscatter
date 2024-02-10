@@ -66,6 +66,11 @@ class Binscatter:
             y_tilde = _residualize(self.y, self.controls)
             x_tilde = _residualize(self.x, self.controls)
 
+        # sort observations
+        argsort = np.argsort(x_tilde)
+        x_tilde = x_tilde[argsort]
+        y_tilde = y_tilde[argsort]
+
         # create bins 
         if self.n_bins is None:
             self.n_bins = _n_bins_optimal(self.x)
