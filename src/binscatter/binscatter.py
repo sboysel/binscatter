@@ -49,7 +49,8 @@ class Binscatter:
         self.y = y
         self.controls = controls
         self.k = k
-        self.n_bins = n_bins    
+        self.n_bins = n_bins
+        self.x_linspace_num = x_linspace_num   
         self.x_binned = None
         self.y_binned = None
         self.x_smooth = None
@@ -78,8 +79,14 @@ class Binscatter:
         # polynomial fit
         coef = np.polyfit(x_binned, y_binned, self.k)
         poly = np.poly1d(coef)
-        x_smooth = np.linspace(x.min(), y.min(), num=x_linspace_num)
+        x_smooth = np.linspace(self.x.min(), self.x.max(), num=self.x_linspace_num)
         y_smooth = poly(x_smooth)
+
+        # update opject
+        self.x_binned = x_binned
+        self.y_binned = y_binned
+        self.x_smooth = x_smooth
+        self.y_smooth = y_smooth
         
         return (x_binned, y_binned, x_smooth, y_smooth)
 
