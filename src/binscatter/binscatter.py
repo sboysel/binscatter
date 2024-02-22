@@ -7,9 +7,9 @@ SPDX-License-Identifier: BSD-3-Clause
 import numpy as np
 
 
-def binscatter(x, y, controls, k=1, n_bins=None, x_linspace_num=100) -> tuple:
+def binscatter(x, y, controls, k=1, n_bins=None, x_linspace=None) -> tuple:
     """Generate data for binned scatterplot"""
-    bs = Binscatter(x, y, controls, k, n_bins, x_linspace_num)
+    bs = Binscatter(x, y, controls, k, n_bins, x_linspace)
     return bs.generate()
 
 class Binscatter:
@@ -42,15 +42,15 @@ class Binscatter:
     based on binscatter by Elizabeth Santorella
     source: https://github.com/esantorella/binscatter
     """
-    def __init__(self, x, y, controls, k=1, n_bins=None, x_linspace_num=100):
+    def __init__(self, x, y, controls, k=1, n_bins=None, x_linspace=None):
         """
         """
         self.x = x
         self.y = y
         self.controls = controls
         self.k = k
-        self.n_bins = n_bins
-        self.x_linspace_num = x_linspace_num   
+        self.n_bins = n_bins   
+        self.x_linspace = x_linspace
         self.x_binned = None
         self.y_binned = None
         self.x_smooth = None
@@ -84,15 +84,18 @@ class Binscatter:
         # polynomial fit
         coef = np.polyfit(x_binned, y_binned, self.k)
         poly = np.poly1d(coef)
-        x_smooth = np.linspace(self.x.min(), self.x.max(), num=self.x_linspace_num)
+        if self.x_linspace is None:
+            self.x_linspace = np.linspace(min(x_binned), max(x_binned), num=self.x_linspace_num)
+        
+        x_smooth = self.x_linspace
         y_smooth = poly(x_smooth)
-
-        # update opject
+        
+        # update object
         self.x_binned = x_binned
         self.y_binned = y_binned
         self.x_smooth = x_smooth
         self.y_smooth = y_smooth
-        
+
         return (x_binned, y_binned, x_smooth, y_smooth)
 
 
