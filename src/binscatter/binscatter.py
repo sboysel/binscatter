@@ -67,7 +67,7 @@ class Binscatter:
             x_tilde = _residualize(self.x, self.controls)
 
         # sort observations
-        argsort = np.argsort(x_tilde)
+        argsort = np.argsort(self.x)
         x_tilde = x_tilde[argsort]
         y_tilde = y_tilde[argsort]
 
