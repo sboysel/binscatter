@@ -115,6 +115,12 @@ def _residualize(y, controls):
     """Calculate ytilde = y - yhat where yhat = Xβ from the model y = Xβ + e
     Recenter ytilde by adding back the original mean of y.
     """
+    n = y.size
+    constant = np.reshape(np.ones(n), (n, 1))
+    if controls is None:
+        controls = constant
+    else:
+        controls = np.hstack((constant, controls))
     # demean y
     beta_y, _ = _ols(controls, y)
     y_hat = _predict(controls, beta_y)
