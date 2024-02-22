@@ -17,19 +17,25 @@ class Binscatter:
 
     Parameters
 
-    x : numpy.ndarray            (required) x values to plot 
-    y : numpy.ndarray            (required) y values to plot
-    controls : numpy.ndarray     (optional) control variables used for conditioning
-                                 the relationship between x and y on. If provided,
-                                 Binscatter.generate() will 'residualize / de-mean'
-                                 both x and y using the variables in controls.
-    k : int                      (required)
-    n_bins: int                  (optional)
-    x_linspace_num : int         (required)
+    x : numpy.ndarray               (required) x values to plot 
+    y : numpy.ndarray               (required) y values to plot
+    controls : numpy.ndarray        (optional) control variables used for 
+        conditioning the relationship between x and y on. If provided, 
+        Binscatter.generate() will 'residualize / de-mean' both x and y using 
+        the variables in controls.
+    k : int                         (required) degree of polynomial to fit through
+        the binned means
+    n_bins: int                     (optional) number of bins. Default: Sturges'
+        Rule is used.
+    x_linspace : numpy.linspace     (optional) linspace over which the smoothed
+        polynomial is evaluated. Default: numpy.linspace(min(x_binned), 
+        max(x_binned), 100).
     
-    for data (y, x), return version with means by bin
-    for data (y, x, controls), first residualize (y, x) with controls, then return
-        the binned version.
+        
+    Procedure:
+        for data (y, x), return version with means by bin
+        for data (y, x, controls), first residualize (y, x) with controls, then 
+            return the binned version.
     
     Returns 
     
